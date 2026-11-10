@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>byo-io</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-alt: #f5f7fa;
+  --fg: #16181d;
+  --muted: #5b6270;
+  --border: #e3e7ee;
+  --accent: #2f6fed;
+  --accent-fg: #ffffff;
+  --code-bg: #0f1420;
+  --code-fg: #d6deeb;
+  --code-kw: #c792ea;
+  --code-fn: #82aaff;
+  --code-cm: #7a8599;
+  --code-ty: #ffcb6b;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1017;
+    --bg-alt: #141923;
+    --fg: #e8ebf1;
+    --muted: #9aa3b2;
+    --border: #252c3a;
+    --accent: #6b9bff;
+    --accent-fg: #0d1017;
+    --code-bg: #080b11;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.6 var(--sans);
+}
+a { color: var(--accent); }
+.wrap { max-width: 64rem; margin: 0 auto; padding-inline: 1.5rem; }
+
+header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+}
+.logo { font: 700 1.125rem var(--mono); color: var(--fg); text-decoration: none; }
+nav a { color: var(--muted); text-decoration: none; margin-left: 1.5rem; font-size: 0.9375rem; }
+nav a:hover { color: var(--fg); }
+
+.hero { padding-block: 4.5rem 4rem; }
+.hero h1 {
+  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin: 0 0 1.25rem;
+  max-width: 16ch;
+}
+.hero p {
+  font-size: 1.1875rem;
+  color: var(--muted);
+  max-width: 36rem;
+  margin: 0 0 2rem;
+}
+.credit { font-size: 0.875rem; color: var(--muted); margin: 1.5rem 0 0; }
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--accent-fg);
+  padding: 0.7rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--border);
+  margin-left: 0.5rem;
+}
+
+section.alt { background: var(--bg-alt); border-block: 1px solid var(--border); padding: 4rem 0; }
+section h2 { font-size: 1.5rem; letter-spacing: -0.01em; margin: 0 0 0.5rem; }
+section .sub { color: var(--muted); margin: 0 0 2rem; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); gap: 1.25rem; }
+.card {
+  display: block;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.card h3 { font: 700 1.125rem var(--mono); margin: 0 0 0.5rem; }
+.card p { color: var(--muted); margin: 0 0 1.25rem; font-size: 0.9375rem; }
+.tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.tag {
+  font: 0.75rem var(--mono);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.split { display: grid; grid-template-columns: 1fr 1.4fr; gap: 3rem; align-items: center; padding-block: 4.5rem; }
+.split ul { padding-left: 1.1rem; color: var(--muted); }
+.split li { margin-bottom: 0.5rem; }
+pre {
+  margin: 0;
+  background: var(--code-bg);
+  color: var(--code-fg);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  font: 0.8125rem/1.65 var(--mono);
+}
+.kw { color: var(--code-kw); }
+.fn { color: var(--code-fn); }
+.cm { color: var(--code-cm); }
+.ty { color: var(--code-ty); }
+
+footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--muted); font-size: 0.875rem; }
+footer a { color: inherit; }
+
+@media (max-width: 760px) {
+  .split { grid-template-columns: 1fr; gap: 2rem; }
+  .btn.ghost { margin: 0.5rem 0 0; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="logo" href="/">byo-io</a>
+    <nav>
+      <a href="#projects">Projects</a>
+      <a href="https://github.com/byo-io">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <h1>Networking libraries that don't do I/O.</h1>
+    <p>Bring-your-own-I/O protocol implementations in C: Each library
+    is a small, deterministic state machine; your application owns the
+    socket, the clock and the event loop.</p>
+    <a class="btn" href="#projects">View projects</a>
+    <a class="btn ghost" href="https://github.com/byo-io">GitHub</a>
+  </div>
+
+  <section class="alt" id="projects">
+    <div class="wrap">
+      <h2>Projects</h2>
+      <p class="sub">Open source, MIT licensed.</p>
+      <div class="cards">
+        <a class="card" href="https://github.com/byo-io/libpcp">
+          <h3>libpcp</h3>
+          <p>Port Control Protocol (RFC 6887) client. Ask a router or
+          firewall to open a port, with retransmissions, lease renewals and
+          server-restart detection built in.</p>
+          <div class="tags"><span class="tag">C23</span><span class="tag">MIT</span><span class="tag">RFC 6887</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap split">
+    <div>
+      <h2>You drive the loop</h2>
+      <p class="sub">Hand the library datagrams and the current time. It tells
+      you what to send and how long you can sleep.</p>
+      <ul>
+        <li>Works with any event loop or socket API</li>
+        <li>No allocations after a mapping is created</li>
+        <li>Tests run hours of retransmissions without waiting</li>
+      </ul>
+      <p class="credit">Inspired by the
+      <a href="https://sans-io.readthedocs.io/">sans-I/O</a> approach to
+      writing network protocol libraries.</p>
+    </div>
+<pre><code><span class="kw">while</span> (running) {
+  <span class="ty">pcp_event_t</span> event;
+  <span class="kw">do</span> {
+    event = <span class="fn">pcp_session_poll</span>(session, <span class="fn">now_ms</span>());
+    <span class="kw">switch</span> (event.type) {
+    <span class="kw">case</span> PCP_EVENT_SEND:
+      <span class="fn">send</span>(socket, event.send.data, event.send.size, <span class="ty">0</span>);
+      <span class="kw">break</span>;
+    <span class="kw">case</span> PCP_EVENT_MAPPED:
+      <span class="cm">// reachable at event.mapped.external</span>
+      <span class="kw">break</span>;
+    <span class="kw">default</span>:
+      <span class="kw">break</span>;
+    }
+  } <span class="kw">while</span> (event.type != PCP_EVENT_TIMEOUT);
+
+  <span class="cm">// wait for a datagram or event.timeout.deadline</span>
+}</code></pre>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="https://github.com/byo-io">github.com/byo-io</a>
+  </div>
+</footer>
+</body>
+</html>
